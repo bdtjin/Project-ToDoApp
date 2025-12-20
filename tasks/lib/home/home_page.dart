@@ -120,7 +120,6 @@ class _AddTodoBottomSheetState extends State<AddTodoBottomSheet>{
           decoration: const InputDecoration(
             hintText: "새 할 일", 
           ),
-
 // 4. 아이콘 + 저장 버튼 추가하기
         ),
       ],
