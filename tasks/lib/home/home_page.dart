@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/home/add_todo_bottom_sheet.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -84,46 +85,17 @@ class HomePage extends StatelessWidget {
   void addTodo(BuildContext context) {
     // BottomSheet를 버튼이 누르면 작동되기에 showModalBottomSheet를 사용
     showModalBottomSheet(
+     isScrollControlled: true,
       context: context,
       builder: (context) {
-        return const AddTodoBottomSheet(); // 아래 함수에서 만들 class를 부를기
+        return const AddTodoBottomSheet(); // AddTodoBottomSheet를 Widget으로 빼서 다른 페이지에서 관리 
       },
     );
   }
-}
-// ------------------------------ 클래스 -> 함수
 
-// 1. class AddTodoBottomSheet 만들기 (바텀시트 만들기)
-// StatefulWidget으로 고정, const (생성자) 변하지 않는 상수
-class AddTodoBottomSheet extends StatefulWidget{
-  const AddTodoBottomSheet({super.key});
-  @override
-  State<AddTodoBottomSheet> createState() => _AddTodoBottomSheetState();
-}
-// 2. class _AddTodoBottomSheetState 만들기 (하단 누르면 키보드) (행동값)
-class _AddTodoBottomSheetState extends State<AddTodoBottomSheet>{
-  @override
-  Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.only(
-      left: 20, right: 20, top: 12,
-      bottom: MediaQuery.of(context).viewInsets.bottom
-    ),
-
-// 3. 키보드 만들기
-    child: Column(
-      mainAxisSize: MainAxisSize.min, // 키보드가 현재 가진 사이즈만큼 올라올 수 있도록
-      children: [TextField(
-          autofocus: true, // 자동으로 포커스 주기 (공식문서참고)
-          style: const TextStyle(fontSize: 16),
-          maxLines: 1, // 최대 라인수 1개, 줄바꿈 제한
-          textInputAction: TextInputAction.done, // 엔터키 X
-          decoration: const InputDecoration(
-            hintText: "새 할 일", 
-          ),
-// 4. 아이콘 + 저장 버튼 추가하기
-        ),
-      ],
-    ),
-    );
-  }
+  // '저장' 버튼 클릭 시, 실행
+  // void saveToDo(){
+  //   // context -> 
+  //   // static list -> 
+  // }
 }
