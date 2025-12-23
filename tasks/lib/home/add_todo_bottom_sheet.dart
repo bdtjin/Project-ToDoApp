@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AddTodoBottomSheet extends StatefulWidget {
-  const AddTodoBottomSheet({super.key});
+  // (3) 사용자에게 입력받은 것을 HomePage에 전달하기 위해 선언
+  // 선언 형태: final Function(타입) 변수명
+  // String은 할 일 제목, bool은 즐겨찾기
+  final Function(String, bool) deliver;
+
+  const AddTodoBottomSheet({super.key, required this.deliver});
   @override
   State<AddTodoBottomSheet> createState() => _AddTodoBottomSheetState();
 }
@@ -20,6 +25,8 @@ class _AddTodoBottomSheetState extends State<AddTodoBottomSheet> {
   // 2-4.'저장'버튼 함수 (새할일에 글씨가 있으면 저장)
   void saveToDo() {
     if (titleController.text.isEmpty) return;
+    // (3) 저장함수 연결_실질적 데이터를 위에 선언자에게 전달
+    widget.deliver(titleController.text, isFavorite);
     Navigator.of(context).pop();
   }
 

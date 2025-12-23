@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/home/add_todo_bottom_sheet.dart';
 import 'package:tasks/todo_entity.dart';
+import 'package:tasks/to_do_view.dart';
 
-class HomePage extends StatelessWidget {
+// (3) StatelessWidget -> StatefulWidget으로 상태 변경
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // 할 일을 담아둘 리스트 (추가되면 화면 바뀜)
    List<TodoEntity> todoList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +30,11 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      // 박스 안 여백으로 상자를 배치
+
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        padding: EdgeInsets.all(20),
+        // (3) 삼항연산자: 리스트가 비어있으면 Column 안에 내용 표시(homepage)
+        child: todoList.isEmpty ? Column(
           children: [
             Container(
               width: 350,
@@ -35,7 +45,6 @@ class HomePage extends StatelessWidget {
               ),
 
               child: Column(
-                // 사진 가운데 정렬
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
@@ -44,7 +53,8 @@ class HomePage extends StatelessWidget {
                     height: 100,
                     fit: BoxFit.cover, // 크기가 고정되었으나 이미지를 일관된 사이즈로 유지
                   ),
-                  const SizedBox(height: 10), // 사진과 글자 간격주기
+
+                  const SizedBox(height: 10),
 
                   const Text(
                     '아직 할 일이 없음',
@@ -55,11 +65,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 12), // 글자와 글자 간격주기
+                  const SizedBox(height: 12),
 
                   const Text(
                     '할 일을 추가하고 지니`s Tesks에서\n할 일을 추적하세요.',
-                    textAlign: TextAlign.center, // 가로 공간 안에서 글자 가운데 정렬
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -70,8 +80,21 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ],
+        ) 
+        // (3) 삼항연산자: 할일리스트가 생겼을 때, ToDoView 화면을 표시
+        : ListView.builder( 
+          itemCount: todoList.length,
+          itemBuilder: (context, index) {
+            final todo = todoList[index];
+            return ToDoView(
+              toDo: todo,
+              onToggleDone: () => setState(() => todo.isDone = !todo.isDone),
+              onToggleFavorite: () => setState(() => todo.isFavorite = !todo.isFavorite),
+            );
+          },
         ),
       ),
+
       // body 밖에서 사용, scaffold 안. // 플로팅버튼은 꼭 onPressed를 전달해줘야 작동함
       // 버튼 구역 => 버튼을 누르면 하단이 올라오게 함수를 부름 (onPressed)
       floatingActionButton: FloatingActionButton(
@@ -83,14 +106,26 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // 함수를 클래스 안으로 가져오고 context를 받도록
+  // (2) 바텀시트 활성화
+  // (3)'저장' 함수 연결
   void addTodo(BuildContext context) {
     // BottomSheet를 버튼이 누르면 작동되기에 showModalBottomSheet를 사용
     showModalBottomSheet(
      isScrollControlled: true,
       context: context,
       builder: (context) {
-        return const AddTodoBottomSheet(); // AddTodoBottomSheet를 Widget으로 빼서 다른 페이지에서 관리 
+        return AddTodoBottomSheet(
+          deliver : (String newTitle, bool isFavorite){
+            setState(() {
+              todoList.add(
+                TodoEntity(
+                  title: newTitle,
+                  isFavorite: isFavorite,
+                  isDone: false,)
+              );
+            });
+          }
+        );
       },
     );
   }
