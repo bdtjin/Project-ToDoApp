@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/home/add_todo_bottom_sheet.dart';
+import 'package:tasks/todo_entity.dart';
 
 class HomePage extends StatelessWidget {
+   List<TodoEntity> todoList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,10 +94,4 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-
-  // '저장' 버튼 클릭 시, 실행
-  // void saveToDo(){
-  //   // context -> 
-  //   // static list -> 
-  // }
 }
