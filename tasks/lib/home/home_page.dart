@@ -16,12 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(
-        255,
-        190,
-        188,
-        188,
-      ), // body 백그라운드 컬러
+      backgroundColor: const Color.fromARGB(255, 190, 188, 188,), // body 백그라운드 컬러
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 226, 223, 223), // appBar 컬러
         title: Text(
@@ -115,12 +110,13 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AddTodoBottomSheet(
-          deliver : (String newTitle, bool isFavorite){
+          deliver : (String newTitle, bool isFavorite, String newDescription){
             setState(() {
               todoList.add(
                 TodoEntity(
-                  title: newTitle,
-                  isFavorite: isFavorite,
+                  title: newTitle, // 새할일 제목
+                  isFavorite: isFavorite, // 별모양 이모키톤
+                  description: newDescription, // 상세설명
                   isDone: false,)
               );
             });

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class AddTodoBottomSheet extends StatefulWidget {
   // (3) 사용자에게 입력받은 것을 HomePage에 전달하기 위해 선언
   // 선언 형태: final Function(타입) 변수명
-  // String은 할 일 제목, bool은 즐겨찾기
-  final Function(String, bool) deliver;
+  // String은 할 일 제목, bool은 즐겨찾기, String 세부사항
+  final Function(String, bool, String) deliver;
 
   const AddTodoBottomSheet({super.key, required this.deliver});
   @override
@@ -13,7 +13,7 @@ class AddTodoBottomSheet extends StatefulWidget {
 
 // 2-1. class _AddTodoBottomSheetState 만들기 (하단 누르면 키보드) (행동값)
 class _AddTodoBottomSheetState extends State<AddTodoBottomSheet> {
-  // 새할일, 세부정보 TextController => 리모컨 같은 역할
+  // 새할일, 세부정보 TextController 선언 => detail 파일에 전달
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
@@ -26,7 +26,10 @@ class _AddTodoBottomSheetState extends State<AddTodoBottomSheet> {
   void saveToDo() {
     if (titleController.text.isEmpty) return;
     // (3) 저장함수 연결_실질적 데이터를 위에 선언자에게 전달
-    widget.deliver(titleController.text, isFavorite);
+    widget.deliver(
+      titleController.text, 
+      isFavorite, 
+      descriptionController.text);
     Navigator.of(context).pop();
   }
 
@@ -62,6 +65,7 @@ class _AddTodoBottomSheetState extends State<AddTodoBottomSheet> {
         mainAxisSize: MainAxisSize.min, // 키보드가 현재 가진 사이즈만큼 올라올 수 있도록
         children: [
           TextField(
+            // controller -> detail 파일에 전달
             controller: titleController,
             autofocus: true, // 자동으로 포커스 주기 (공식문서참고)
             style: const TextStyle(fontSize: 16),
@@ -79,6 +83,8 @@ class _AddTodoBottomSheetState extends State<AddTodoBottomSheet> {
           if (isDescription)
             Flexible(
               child: TextField(
+                // controller -> detail 파일에 전달
+                controller: descriptionController,
                 autofocus: true, // 자동으로 포커스 주기 (공식문서참고)
                 style: const TextStyle(fontSize: 14),
                 maxLines: null, // 줄바꿈 되도록 구현 (+Flexible)
