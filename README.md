@@ -8,7 +8,8 @@
 
 ---
 
-![alt text](todoapp.jpg)
+![Uploading todoapp.jpg…]()
+
 
 ## 1. 프로젝트 소개
 Flutter 기초 과정에서 배운 레이아웃 설계 능력을 바탕으로 실무에서 사용하는 홈페이지(Home Page), 바텀시트(Bottom Sheet), 디테일 페이지 (Detail Page) 등 페이지 간 데이터 전달 시스템을 구현하고 직접 app을 구상 및 구성하게 했습니다.
