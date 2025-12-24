@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/todo_entity.dart';
+import 'package:tasks/todo_detail/widgets/todo_entity.dart';
 
 class ToDoDetail extends StatefulWidget {
   final TodoEntity todo; // 홈페이지에서 넘겨받은 데이터

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/home/add_todo_bottom_sheet.dart';
-import 'package:tasks/todo_entity.dart';
-import 'package:tasks/to_do_view.dart';
+import 'package:tasks/home/widgets/add_todo_bottom_sheet.dart';
+import 'package:tasks/todo_detail/widgets/todo_entity.dart';
+import 'package:tasks/todo_detail/widgets/to_do_view.dart';
 
 // (3) StatelessWidget -> StatefulWidget으로 상태 변경
 class HomePage extends StatefulWidget {
