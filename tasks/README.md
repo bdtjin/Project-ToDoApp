@@ -1,16 +1,94 @@
-# tasks
+# ToDo App 만들기
 
-A new Flutter project.
+목차
+1. 프로젝트 소개
+2. 주요기능
+3. 프로젝트 파일 구조
+4. Trouble Shooting 
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+![alt text](todoapp.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+## 1. 프로젝트 소개
+Flutter 기초 과정에서 배운 레이아웃 설계 능력을 바탕으로 실무에서 사용하는 홈페이지(Home Page), 바텀시트(Bottom Sheet), 디테일 페이지 (Detail Page) 등 페이지 간 데이터 전달 시스템을 구현하고 직접 app을 구상 및 구성하게 했습니다.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 2. 주요기능
+1. 직관적인 페이지
+ - 메인페이지: `AppBar` 타이틀에 이름을 적용할 수 있도록 하여 개인화된 페이지를 구성했으며, `webp`이미지를 배치해서 용량을 줄여서 앱의 기능을 최적화 했습니다.
+ - 할일 목록 페이지: 할 일 데이터 유무에 따라 '할 일 없음' 위젯과 '리스트뷰'를 적용했습니다.
+ - 상세 정보 페이지: `ToDoEntity` 객체를 넘겨받아서 상세 내용을 화면에 구성하고 페이지와 리스트 페이지 간의 데이터를 넘겨받을 수 있도록 구현했습니다.
+2. 스마트 할 일 추가
+ - focus 시스템: 추가 창 활성화 시에 자동 포커스가 될 수 있도록 구성하여 키보드 노출로 사용자가 입력할 수 있도록 했습니다.
+ - 반응형 레이아웃: `MediaQuery`를 사용해서 키보드가 올라올 때 입력창이 가려지지 않도록 하단 여백을 조절했습니다.
+ - '저장'버튼 활용: 할 일 제목이 입력된 경우에만 '저장'버튼이 활성화 되도록 설계했습니다.
+ 3. 상태기반 리스트
+  - 아이콘 및 취소선 사용: 즐겨찾기를 활성화해서 사용자가 즐겨찾는 내용을 한 눈에 확인 할 수 있도록 했으며, 체크박스를 선택했을 때엔 할 일 제목에 취소선 효과를 넣어서 실시간으로 상태를 확인 할 수 있도록 했습니다.
+  - Home Page와 Detail page 연동: 할 일이 없을 경우에 사용자에게 할 일 목록을 작성하라고 위젯을 표시하고, 할 일 목록이 있을 경우에는 리스트를 한 눈에 볼 수 있도록 화면을 노출시켜 줍니다.
+  - 텍스트 입력 제한: 할 일 제목에는 텍스트 제한을 둬서 제목을 한 눈에 볼 수 있게 구현했으며, 상세 텍스트에는 글자가 길어지면 자동으로 줄바꿈이 될 수 있도록 적용했습니다.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 3. 프로젝트 파일 구조
+ 
+📦lib
+ ┣ home
+ ┃ ┣ widgets
+ ┃ ┃ ┗ add_todo_bottom_sheet.dart
+ ┃ ┗ home_page.dart
+ ┣ todo_detail
+ ┃ ┣ widgets
+ ┃ ┃ ┣ to_do_view.dart
+ ┃ ┃ ┗ todo_entity.dart
+ ┃ ┗ detail_page.dart
+ ┗ main.dart
+
+ ### 4. Troble Shooting
+프로젝트 진행 중 발생한 문제와 해결 과정을 기록해봅니다.
+
+1) TextField 레이아웃 오버플로우 문제
+ - 문제: 상세 설명 입력창에 `maxLines: null`을 설정하자, 텍스트가 길어질 때 부모 위젯의 범위를 벗어나서 오버플로우가 발생했습니다.
+ - 원인: 무한히 늘어날 수 있는 `TextField`가 크기 제한이 없는 `Row`/`Column` 안에 위치했기 때문이었습니다.
+ - 해결: `TextField`를 `Flexible` 위젯으로 감싸서 부모 내에 사용 가능한 공간만 차지하고, 내용이 많아지면 남은 공간만 사용할 수 있도록 늘어났습니다.
+
+ 2) `setState`와 `StatefulWidget`
+  - 문제: 할 일 리스트에 항목을 추가했으나, 아이콘을 체크해도 화면에는 아무런 변화가 없었습니다. `setState`를 쓰려면 `The method 'setState' ins't defined` 라는 에러가 발생했습니다.
+  - 원인: `StatelessWidget`은 사용하게 되면 화면을 바꿀 수 없는 위젯으로 화면의 일부가 사용자의 동작으로 변하게 될 시에는 반드시 `StatefulWidget`을 사용해야 했습니다.
+  - 해결: 위젯을 `StatefulWidet`으로 변경하고, 데이터가 변경되는 시점에 `setState()`를 호출하게 해서 데이터 변화에 따라 화면 변화를 줄 수 있었습ㅂ니다.
+
+ 3) `titleController.addListener`
+  - 문제: 할 일 제목을 입력하지 않았을 때도 '저장'버튼이 활성화 되는 문제가 있었습니다.
+  - 원인: `TextField`에 글자가 써지고 지워지는 것을 실시간으로 확인 할 수 있는 기능이 필요했습니다.
+  - 해결: `TextField`에서 `addListener`기능을 활용하고 `initState`에서 리스너를 사용, 사용자가 글자를 치게되면 `canSave` 변수를 업데이트 하도록 해서 문제를 해결했습니다.
+  ```dart
+  @override
+  void initState() {
+    super.initState();
+    titleController.addListener(() {
+      setState(() {
+        canSave = titleController.text.isNotEmpty;
+      });
+    });
+  }
+  ```
+  
+ 4) 위젯 분리와 객체 넘기기
+  - 문제: 코드가 너무 길어지기 시작하면서 `ToDoView`나 `AddTodoBottomSheet`를 별도의 파일로 분리했더니 `HomePage`에 있는 데이터를 찾을 수 없다는 에러가 많아져서 당황했었습니다.
+  - 원인: 파일로 분리되면서 위젯이 떨어지게 되고, 데이터를 사용하려면 **생성자**라는 것을 통해 데이터를 넘겨줘야 했습니다.
+  - 해결: 객체 전달과 함수 전달
+    - 객체 전달: `ToDoView`가 `TodoEntity` 전체를 받을 수 있도록 `final TodoEntity toDo;`를 선언하고 `required` 키워드로 받아서 해결했습니다.
+    - 함수 전달: 상세 페이지나 자식 위젯에서 부모의 상태를 바꾸려면 함수 자체를 전달해서 콜백하는 방식이 필요했습니다. `final VoidCallback onToggleDone;`처럼 함수를 변수로 넘겨주는 방식을 사용하여 해결했습니다.
+
+ 5) `final` 변수
+  - 문제: `todo.isDone = !todo.isDone;` 코드를 썼는데 에러가 발생했습니다. `can't be used as a setter because it's final`
+  - 원인: `TodoEntity` 클래스에서 변수들을 `final`로 선언했기에 변하지 않는 값으로 인식되어 수정이 불가능했던 것으로 확인했습니다.
+  - 해결: 상태가 변할 수 있도록 `final` 키워드를 제거하고 변경 가능한 상태로 만들었습니다.
+
+ 이 외에도 많은 트러블슈팅이 있었으나 작성하다가 밤을 샐 것 같아서 이 정도로 마무리 해보겠습니다.
+
+  ---
+  ### 프로젝트를 마치며
+  이번 프로젝트를 통해 데이터는 객체 전달과 함수 전달, 위젯의 위치 등의 핵심 원리가 중요하다는 사실을 깨닫게 해주었으며, 머리속으로는 이해가 되는데 조금은 구조적인 부분에서 도움이 될 수 있었던 프로젝트 였습니다.
+
+
+  이번 To Do App은 저에게는 아직은 너무 어려운 프로젝트였던 것 같습니다. 거의 1년은 지난 느낌..
+  완성은 했으나 그때 그때의 에러에 유연하지 못 하게 당황을 많이하고 대응했던게 아쉽고 꼭 다시 만들어보고 복습하는 시간이 필요하다고 느낍니다.
+  
